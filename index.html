@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenus</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        h1 {
+            background-color: black;
+            color: greenyellow;
+            font-size: xx-large;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1>AROUNA Ramdane</h1>
+        <button onclick="save()">SAVE</button>
+        <button onclick="lire()">LIRE</button>
+        <button onclick="deleteName()">DELETE</button>
+    </center>
+
+    <script>
+        function enregistrerNom() {
+            localStorage.setItem("nom","AGAO");
+        }
+        function lireNom() {
+            alert(localStorage.getItem("nom"));
+        }
+        function supprimer() {
+            localStorage.removeItem("nom")
+            alert("le nom supprimer avec succès")
+        }
+    </script>
+    <script>
+        let request=indexedDB.open("MaBase",1);
+        request.onupgradeneeded=event=>{
+            let db=event.target.result;
+            db.createObjectStore("etudiant",{keyPath: "id"})
+        };
+        request.onsuccess=event=>{
+            let db=event.target.result;
+            let transaction=db.transaction("etudiant", "readwrite");
+            let store=transaction.objectStore("etudiant");
+            store.add({id: 1, nom: "Arouna"})
+            store.get(1).onsuccess=e =>{
+            console.log(e.target.result);
+            
+        };
+        };
+
+        
+
+
+    </script>
+    
+    <script>
+        if("serviceWorker" in navigator){
+            navigator.serviceWorker.register("/service_worker.js").then(()=>(console.log("serviceWorker is here")))
+        }
+    </script>
+</body>
+</html>
